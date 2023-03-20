@@ -1,7 +1,8 @@
-var express = require("express")
-var app = express();
-var router = express.Router();
-var HomeController = require("../controllers/HomeController");
+let express = require("express")
+let app = express();
+let router = express.Router();
+let HomeController = require("../controllers/HomeController");
+
 
 router.get('/', HomeController.index);
 
