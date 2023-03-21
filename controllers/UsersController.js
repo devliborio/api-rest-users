@@ -30,7 +30,7 @@ class UsersController {
             return;
         }
 
-        if(password.length < 5){
+        if (password.length < 5) {
             passwordError = "Senha não pode conter menos de 5 caracteres!"
             res.json({ err: passwordError });
             return;
