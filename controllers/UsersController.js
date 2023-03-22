@@ -37,6 +37,14 @@ class UsersController {
             return;
         }
 
+        let emailExists =  await User.findEmail(email);
+
+        if(emailExists){
+            res.status(406)
+            res.json({err: "O email já está cadastrado!"})
+            return;
+        }
+
         await User.new(email, password, name);
 
         res.send("Dados recebidos com sucesso!");

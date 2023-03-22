@@ -6,11 +6,32 @@ class User {
     async new(email, password, name) {
         try {
             let hash = await bcrypt.hash(password, 10); // Primeiro parâmetro a senha e quantas vezes vamos "hashear" ela.
-            await knex.insert({ email, password: hash, name, role: 0 }).table('users')
+            await knex.insert({ email, password: hash, name, role: 0 }).table('users');
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
+    }
+
+    async findEmail(email){
+
+        try{
+
+            let result = await knex.select('*').from('users').where({email: email});
+
+            if(result.length > 0){
+                return true
+            } else {
+                return false
+            }
+
+        } catch(err){
+
+            console.log(err);
+            return false;
+
+        }
+
     }
 }
 
-module.exports = new User()
+module.exports = new User();
