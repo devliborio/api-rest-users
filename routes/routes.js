@@ -1,8 +1,8 @@
-let express = require("express");
-let app = express();
-let router = express.Router();
-let HomeController = require("../controllers/HomeController");
-let UserController = require("../controllers/UsersController");
+const express = require("express");
+const app = express();
+const router = express.Router();
+const HomeController = require("../controllers/HomeController");
+const UserController = require("../controllers/UsersController");
 
 
 router.get('/', HomeController.index);

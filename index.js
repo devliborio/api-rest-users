@@ -1,7 +1,7 @@
-let bodyParser = require('body-parser')
-let express = require("express")
-let app = express()
-let router = require("./routes/routes")
+const bodyParser = require('body-parser')
+const express = require("express")
+const app = express()
+const router = require("./routes/routes")
  
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
