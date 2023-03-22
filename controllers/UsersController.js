@@ -1,3 +1,4 @@
+const User = require("../models/User");
 class UsersController {
 
     async create(req, res) {
@@ -9,7 +10,7 @@ class UsersController {
         if (email == undefined || email == "") {
             emailError = "E-mail invalido ou indefinido!"
             res.json({ err: emailError });
-            return;
+            return; // Importante trabalhando com controllers
         }
 
         if (name == undefined || name == "") {
@@ -35,6 +36,8 @@ class UsersController {
             res.json({ err: passwordError });
             return;
         }
+
+        await User.new(email, password, name);
 
         res.send("Dados recebidos com sucesso!");
     }
