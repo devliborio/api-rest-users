@@ -8,17 +8,21 @@ class UsersController {
 
     async searchById(req, res) {
         let id = req.params.id;
+        id = Number(id);
         let usersById = await User.findById(id);
 
         if (usersById == undefined) {
             res.status(404);
             res.json({ msg: "Usuário não encontrado!" });
-
+            return;
+            
+        } else if (!id) {
+            res.status(404)
+            res.json({msg: "Usuário não encontrado!"});
+            return;
         } else {
-            if (isNaN(usersById)) {
-                res.status(200);
-                res.json(usersById);
-            }
+            res.json(usersById);
+            return;
         }
     }
 
