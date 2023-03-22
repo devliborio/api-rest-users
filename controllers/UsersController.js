@@ -15,10 +15,10 @@ class UsersController {
             res.status(404);
             res.json({ msg: "Usuário não encontrado!" });
             return;
-            
+
         } else if (!id) {
             res.status(404)
-            res.json({msg: "Usuário não encontrado!"});
+            res.json({ msg: "Usuário não encontrado!" });
             return;
         } else {
             res.json(usersById);
@@ -34,45 +34,65 @@ class UsersController {
 
         if (email == undefined || email == "") {
             emailError = "E-mail invalido ou indefinido!"
-            res.json({ err: emailError });
+            res.json({ msg: emailError });
             return; // Importante trabalhando com controllers
         }
 
         if (name == undefined || name == "") {
             nameError = "Nome invalido ou indefinido!"
-            res.json({ err: nameError });
+            res.json({ msg: nameError });
             return;
         }
 
         if (name.length < 4) {
             nameError = "Nome não pode conter menos que 4 caracteres!"
-            res.json({ err: nameError });
+            res.json({ msg: nameError });
             return;
         }
 
         if (password == undefined || password == "") {
             passwordError = "Senha invalida ou indefinida!"
-            res.json({ err: passwordError });
+            res.json({ msg: passwordError });
             return;
         }
 
         if (password.length < 5) {
             passwordError = "Senha não pode conter menos de 5 caracteres!"
-            res.json({ err: passwordError });
+            res.json({ msg: passwordError });
             return;
         }
 
-        let emailExists = await User.findEmail(email);
+        let emailExists = await User.findEmail(email); // true or false 
 
         if (emailExists) {
             res.status(406)
-            res.json({ err: "O email já está cadastrado!" })
+            res.json({ msg: "O email já está cadastrado!" })
             return;
         }
 
         await User.new(email, password, name);
 
         res.send("Dados recebidos com sucesso!");
+    }
+
+    async edit(req, res) {
+        let { id, name, email, role } = req.body;
+        let result = await User.update(id, name, email, role);
+        if (result != undefined) {
+            if (result.status) {
+                res.status(200);
+                res.send("Edição realizada com sucesso!");
+                return;
+            } else {
+                res.status(406)
+                res.send(result.msg)
+                return;
+            }
+        } else {
+            res.status(406);
+            res.send("Ocorreu um erro no servidor!");
+            return;
+        }
     }
 }
 

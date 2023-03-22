@@ -61,6 +61,50 @@ class User {
             return undefined;
         }
     }
+
+    async update(id, name, email, role) {
+        let user = await this.findById(id);
+
+        if (user != undefined) {
+
+            let editUser = {};
+
+            if (email != undefined) {
+                if (email != user.email) {
+                    let result = await this.findEmail(email);
+                    if (result == false) {
+                        editUser.email = email;
+                    } else {
+                        return { status: false, msg: "O email já está cadastrado!" };
+                    }
+                }
+            }
+
+
+            if (name != undefined) {
+                if (name < 4) {
+                    return { status: false, msg: "O nome não pode conter menos que 4 caracteres!" };
+                } else {
+                    editUser.name = name;
+                }
+            }
+
+            if (role != undefined) {
+                editUser.role = role;
+            }
+
+            try {
+                await knex.update(editUser).where({ id: id }).table("users");
+                return { status: true };
+            } catch (err) {
+                return { status: false, msg: err };
+            }
+
+
+        } else {
+            return { status: false, msg: "O usuário não existe!" }; // Uma forma de se comunicar com o controller!
+        }
+    }
 }
 
 module.exports = new User();

@@ -9,5 +9,6 @@ router.get('/', HomeController.index);
 router.get('/user', UserController.search);
 router.get('/user/:id', UserController.searchById);
 router.post('/user', UserController.create);
+router.put('/user', UserController.edit);
 
 module.exports = router;
