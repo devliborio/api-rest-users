@@ -1,6 +1,27 @@
 const User = require("../models/User");
 class UsersController {
 
+    async search(req, res) {
+        let users = await User.findAll();
+        res.json(users)
+    }
+
+    async searchById(req, res) {
+        let id = req.params.id;
+        let usersById = await User.findById(id);
+
+        if (usersById == undefined) {
+            res.status(404);
+            res.json({ msg: "Usuário não encontrado!" });
+
+        } else {
+            if (isNaN(usersById)) {
+                res.status(200);
+                res.json(usersById);
+            }
+        }
+    }
+
     async create(req, res) {
         let { email, name, password } = req.body;
         let emailError;
@@ -37,11 +58,11 @@ class UsersController {
             return;
         }
 
-        let emailExists =  await User.findEmail(email);
+        let emailExists = await User.findEmail(email);
 
-        if(emailExists){
+        if (emailExists) {
             res.status(406)
-            res.json({err: "O email já está cadastrado!"})
+            res.json({ err: "O email já está cadastrado!" })
             return;
         }
 
