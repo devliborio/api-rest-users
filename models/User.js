@@ -108,7 +108,7 @@ class User {
 
 
     async delete(id) { // Sistema dee deleção de usuários
-        let user = this.findById(id)
+        let user = await this.findById(id)
 
         if (user != undefined) {
             try {
