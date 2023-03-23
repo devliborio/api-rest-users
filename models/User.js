@@ -48,7 +48,7 @@ class User {
 
     async findById(id) { // Sistema de busca de usuários por ID
         try {
-            let result = await knex.select("id", "name", "email", "role").where({ id: id }).table("users");
+            let result = await knex.select(["id", "name", "email", "role"]).where({ id: id }).table("users");
             if (result.length > 0) {
                 return result[0];
 
