@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const PasswordToken = require("../models/PasswordToken");
 class UsersController {
 
     async search(req, res) {
@@ -108,6 +109,25 @@ class UsersController {
             res.status(406);
             res.send(result.msg);
             return;
+        }
+    }
+
+    async recoverPassword(req, res) {
+        let email = req.body.email;
+        let user = await User.findByEmail(email);
+        console.log(user);
+        if (user != undefined) {
+            let result = await PasswordToken.create(user)
+            if (result.status) {
+                res.status(200);
+                res.send("" + result.token);
+            } else {
+                res.status(406)
+                res.send(result.err);
+            }
+        } else {
+            res.status(406)
+            res.send("O email não existe no banco de dados!");
         }
     }
 }
