@@ -130,6 +130,21 @@ class UsersController {
             res.send("O email não existe no banco de dados!");
         }
     }
+
+    async changePassword(req, res) {
+        let token = req.body.token;
+        let password = req.body.password;
+        let isTokenValid = await PasswordToken.validate(token);
+
+        if (isTokenValid.status) {
+            await User.changePassword(password, isTokenValid.token.user_id, isTokenValid.token.token)
+            res.status(200)
+            res.send("Senha alterada com sucesso!");
+        } else {
+            res.status(406)
+            res.send("Token inválido!");
+        }
+    }
 }
 
 module.exports = new UsersController();

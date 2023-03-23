@@ -1,5 +1,6 @@
 const knex = require('../database/connection');
 const bcrypt = require('bcrypt');
+const PasswordToken = require('./PasswordToken');
 
 class User {
 
@@ -13,9 +14,7 @@ class User {
     }
 
     async findEmail(email) { //  Método para validação de e-mail já existente
-
         try {
-
             let result = await knex.select('*').from('users').where({ email: email });
 
             if (result.length > 0) {
@@ -23,19 +22,16 @@ class User {
             } else {
                 return false
             }
-
         } catch (err) {
 
             console.log(err);
             return false;
 
         }
-
     }
 
 
     async findAll() { // Sistema de busca de usuários
-
         try {
             let result = await knex.select(["id", "name", "email", "role"]).table("users");
             return result
@@ -43,7 +39,6 @@ class User {
             console.log(err);
             return [];
         }
-
     }
 
     async findById(id) { // Sistema de busca de usuários por ID
@@ -96,7 +91,6 @@ class User {
                 }
             }
 
-
             if (name != undefined) {
                 if (name < 4) {
                     return { status: false, msg: "O nome não pode conter menos que 4 caracteres!" };
@@ -116,12 +110,10 @@ class User {
                 return { status: false, msg: err };
             }
 
-
         } else {
             return { status: false, msg: "O usuário não existe!" }; // Uma forma de se comunicar com o controller!
         }
     }
-
 
     async delete(id) { // Sistema dee deleção de usuários
         let user = await this.findById(id)
@@ -136,6 +128,12 @@ class User {
         } else {
             return { status: false, msg: "O usuário não existe, portanto não pode ser deletado." };
         }
+    }
+
+    async changePassword(newPassword, id, token) {
+        let hash = await bcrypt.hash(newPassword, 10);
+        await knex.update({ password: hash }).where({ id: id }).table("users");
+        await PasswordToken.setUsed(token);
     }
 }
 
