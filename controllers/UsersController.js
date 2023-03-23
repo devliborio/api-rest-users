@@ -94,6 +94,22 @@ class UsersController {
             return;
         }
     }
+
+    async remove(req, res) {
+        let id = req.params.id;
+
+        let result = await User.delete(id);
+
+        if (result.status) {
+            res.status(200);
+            res.send("Exclusão realizada com sucesso!");
+            return;
+        } else {
+            res.status(406);
+            res.send(result.msg);
+            return;
+        }
+    }
 }
 
 module.exports = new UsersController();

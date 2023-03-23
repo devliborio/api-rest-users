@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 class User {
 
-    async new(email, password, name) {
+    async new(email, password, name) { // Método de criação de usuário
         try {
             let hash = await bcrypt.hash(password, 10); // Primeiro parâmetro a senha e quantas vezes vamos "hashear" ela.
             await knex.insert({ email, password: hash, name, role: 0 }).table('users');
@@ -12,7 +12,7 @@ class User {
         }
     }
 
-    async findEmail(email) {
+    async findEmail(email) { //  Método para validação de e-mail já existente
 
         try {
 
@@ -62,7 +62,7 @@ class User {
         }
     }
 
-    async update(id, name, email, role) {
+    async update(id, name, email, role) { // Sistema de edição de usuários
         let user = await this.findById(id);
 
         if (user != undefined) {
@@ -103,6 +103,22 @@ class User {
 
         } else {
             return { status: false, msg: "O usuário não existe!" }; // Uma forma de se comunicar com o controller!
+        }
+    }
+
+
+    async delete(id) { // Sistema dee deleção de usuários
+        let user = this.findById(id)
+
+        if (user != undefined) {
+            try {
+                await knex.delete().where({ id: id }).table("users");
+                return { status: true }
+            } catch (err) {
+                return { status: false, msg: err };
+            }
+        } else {
+            return { status: false, msg: "O usuário não existe, portanto não pode ser deletado." };
         }
     }
 }
