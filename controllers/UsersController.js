@@ -2,7 +2,7 @@ const User = require("../models/User");
 const PasswordToken = require("../models/PasswordToken");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const secret = "raa?*r6q859a#7nG2Q@laBEFOBx7^XL.qkw~|JSh"
+const secret = require("../secret_jwt/secret")
 
 class UsersController {
 
@@ -32,10 +32,11 @@ class UsersController {
     }
 
     async create(req, res) {
-        let { email, name, password } = req.body;
+        let { email, name, password, role} = req.body;
         let emailError;
         let nameError;
         let passwordError;
+        let roleError;
 
         if (email == undefined || email == "") {
             emailError = "E-mail invalido ou indefinido!"
@@ -67,6 +68,18 @@ class UsersController {
             return;
         }
 
+        if(role.length > 1){
+            roleError = "O cargo só pode ser 1 ou 0"
+            res.json({ msg: roleError });
+            return;
+        }
+
+        if(role == undefined || role == ""){
+            roleError = "Cargo invalido ou vazio."
+            res.json({ msg: roleError });
+            return;
+        }
+
         let emailExists = await User.findEmail(email); // true or false 
 
         if (emailExists) {
@@ -75,7 +88,7 @@ class UsersController {
             return;
         }
 
-        await User.new(email, password, name);
+        await User.new(email, password, name, role);
 
         res.send("Dados recebidos com sucesso!");
     }

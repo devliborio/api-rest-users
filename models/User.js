@@ -4,10 +4,10 @@ const PasswordToken = require('./PasswordToken');
 
 class User {
 
-    async new(email, password, name) { // Método de criação de usuário
+    async new(email, password, name, role) { // Método de criação de usuário
         try {
             let hash = await bcrypt.hash(password, 10); // Primeiro parâmetro a senha e quantas vezes vamos "hashear" ela.
-            await knex.insert({ email, password: hash, name, role: 0 }).table('users');
+            await knex.insert({ email, password: hash, name, role}).table('users');
         } catch (err) {
             console.log(err);
         }
