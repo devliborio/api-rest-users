@@ -1,5 +1,9 @@
 const User = require("../models/User");
 const PasswordToken = require("../models/PasswordToken");
+const jwt = require("jsonwebtoken");
+
+const secret = "raa?*r6q859a#7nG2Q@laBEFOBx7^XL.qkw~|JSh"
+
 class UsersController {
 
     async search(req, res) {
