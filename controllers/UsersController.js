@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const PasswordToken = require("../models/PasswordToken");
 const jwt = require("jsonwebtoken");
-
+const bcrypt = require("bcrypt");
 const secret = "raa?*r6q859a#7nG2Q@laBEFOBx7^XL.qkw~|JSh"
 
 class UsersController {
@@ -116,6 +116,27 @@ class UsersController {
         }
     }
 
+    async login(req, res) {
+        var { email, password } = req.body;
+        let user = await User.findByEmail(email)
+
+        if (user != undefined) {
+            let result = await bcrypt.compare(password, user.password);
+            if (result) {
+                let token = jwt.sign({ email: user.email, role: user.role }, secret);
+                res.status(200);
+                res.json({ token: token });
+
+            } else {
+                res.status(400)
+                res.json({ err: "A senha está incorreta!" })
+            }
+        } else {
+            res.status(404);
+            res.json({ err: "Usuário não encontrado!" });
+        }
+    }
+
     async recoverPassword(req, res) {
         let email = req.body.email;
         let user = await User.findByEmail(email);
@@ -130,7 +151,7 @@ class UsersController {
                 res.send(result.err);
             }
         } else {
-            res.status(406)
+            res.status(404)
             res.send("O email não existe no banco de dados!");
         }
     }

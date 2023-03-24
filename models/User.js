@@ -59,7 +59,7 @@ class User {
 
     async findByEmail(email) { // Sistema de busca de usuários por ID
         try {
-            let result = await knex.select(["id", "name", "email", "role"]).where({ email: email }).table("users");
+            let result = await knex.select(["id", "name", "password", "email", "role"]).where({ email: email }).table("users");
             if (result.length > 0) {
                 return result[0];
 
