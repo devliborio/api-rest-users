@@ -38,44 +38,51 @@ class UsersController {
         let passwordError;
         let roleError;
 
-        if (email == undefined || email == "") {
-            emailError = "E-mail invalido ou indefinido!"
+        if (email == undefined || email == "" || email == " ") {
+            emailError = "E-mail invalido ou indefinido!";
+            res.status(400);
             res.json({ msg: emailError });
             return; // Importante trabalhando com controllers
         }
 
-        if (name == undefined || name == "") {
-            nameError = "Nome invalido ou indefinido!"
+        if (name == undefined || name == "" || name == " ") {
+            nameError = "Nome invalido ou indefinido!";
+            res.status(400);
             res.json({ msg: nameError });
             return;
         }
 
         if (name.length < 4) {
-            nameError = "Nome não pode conter menos que 4 caracteres!"
+            nameError = "Nome não pode conter menos que 4 caracteres!";
+            res.status(400);
             res.json({ msg: nameError });
             return;
         }
 
-        if (password == undefined || password == "") {
-            passwordError = "Senha invalida ou indefinida!"
+        if (password == undefined || password == "" || password == " ") {
+            passwordError = "Senha invalida ou indefinida!";
+            res.status(400);
             res.json({ msg: passwordError });
             return;
         }
 
         if (password.length < 5) {
             passwordError = "Senha não pode conter menos de 5 caracteres!"
+            res.status(400);
             res.json({ msg: passwordError });
             return;
         }
 
-        if(role.length > 1){
+        if(role > 1){
             roleError = "O cargo só pode ser 1 ou 0"
+            res.status(400);
             res.json({ msg: roleError });
             return;
         }
 
-        if(role == undefined || role == ""){
+        if(role == undefined){
             roleError = "Cargo invalido ou vazio."
+            res.status(400);
             res.json({ msg: roleError });
             return;
         }
