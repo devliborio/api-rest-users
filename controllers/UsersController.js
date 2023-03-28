@@ -31,8 +31,12 @@ class UsersController {
         }
     }
 
+    async validate(req, res) {
+        res.send("Validação ok!")
+    }
+
     async create(req, res) {
-        let { email, name, password, role} = req.body;
+        let { email, name, password, role } = req.body;
         let emailError;
         let nameError;
         let passwordError;
@@ -73,14 +77,14 @@ class UsersController {
             return;
         }
 
-        if(role > 1){
+        if (role > 1) {
             roleError = "O cargo só pode ser 1 ou 0"
             res.status(400);
             res.json({ msg: roleError });
             return;
         }
 
-        if(role == undefined){
+        if (role == undefined) {
             roleError = "Cargo invalido ou vazio."
             res.status(400);
             res.json({ msg: roleError });
