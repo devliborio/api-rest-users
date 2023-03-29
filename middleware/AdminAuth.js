@@ -13,12 +13,12 @@ module.exports = function (req, res, next) {
                 next();
             } else {
                 res.status(401);
-                res.json({msg: "Voce não tem permissão para está requisição"});
+                res.send("Você não tem permissão para esta requisição!.");
                 return;
             }
         } catch (err) {
             res.status(401);
-            res.json({msg: "Voce não está autenticado"});
+            res.send("Você não está autenticado.");
             return;
         }
     } else {
