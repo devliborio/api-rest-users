@@ -9,7 +9,7 @@ module.exports = function (req, res, next) {
         let token = bearer[1];
         try {
             let decoded = jwt.verify(token, secret);
-            if(decoded.role == 1){
+            if (decoded.role == 1) {
                 next();
             } else {
                 res.status(401);
@@ -23,7 +23,7 @@ module.exports = function (req, res, next) {
         }
     } else {
         res.status(401);
-        res.json({msg: "Voce não está autenticado"});
+        res.json({ msg: "Voce não está autenticado" });
         return;
     }
 }
